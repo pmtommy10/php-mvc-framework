@@ -1,0 +1,39 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        # Prevent people from looking directly into folders
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # # Handle Authorization Header
+    # RewriteCond %{HTTP:Authorization} .
+    # RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ /%1 [L,R=301]
+
+    # # Send Requests To Front Controller...
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteRule ^ /index.php [L]
+
+    # remove public/ from URLs using a redirect rule
+    RewriteCond %{THE_REQUEST} \s/+(.+/)?public/(\S*) [NC]
+    RewriteRule ^ /%1 [R=301,L]
+
+    # If the following conditions are true, then rewrite the URL:
+    # If the requested filename is not a directory,
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # and if the requested filename is not a regular file that exists,
+    RewriteCond %{REQUEST_FILENAME} !-f
+    # and if the requested filename is not a symbolic link,
+    RewriteCond %{REQUEST_FILENAME} !-l
+    # then rewrite the URL in the following way:
+    # Take the whole request filename and provide it  to index.php
+    # as it is. Stop processing this .htaccess file (L).
+    RewriteRule . index.php [L]
+
+</IfModule>
